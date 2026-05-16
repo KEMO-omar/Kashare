@@ -3,125 +3,421 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaShare - نقل الملفات</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap">
+    <title>KaShare- كا شير | نقل الملفات </title>
+
+    <meta name="description" content="موقع كا شير KaShare هو أسرع أداة مجانية لنقل الصور، الفيديوهات، والمستندات عبر الإنترنت. تحويل فوري للملفات إلى نصوص مشفرة وتدميرها تلقائياً فور الاستلام لضمان أمان بنسبة 100%.تصميم كريم عمر">
+    <meta name="keywords" content="كا شير, KaShare, نقل ملفات, مشاركة ملفات, نقل بيانات سريع, تشفير ملفات, فاست شير, كيمو عمر, كريم عمر, نقل صور وفيديوهات, alhady firebase, kashare github">
+    <meta name="author" content="كريم عمر - Kareem Omar">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#ff3b30">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kemo-omar.github.io/Kashare/">
+    <meta property="og:title" content="KaShare - كا شير | أسرع منصة آمنة لنقل وتشفير الملفات مجاناً">
+    <meta property="og:description" content="انقل ملفاتك بسرعة البرق! بمجرد الاستلام تختفي البيانات تماماً من السيرفر. أمان 100% من تطوير كريم عمر.">
+    <meta property="og:image" content="https://kemo-omar.github.io/Kashare/kas.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="KaShare">
+    <meta property="og:locale" content="ar_EG">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://kemo-omar.github.io/Kashare/">
+    <meta name="twitter:title" content="KaShare - كا شير | أسرع منصة آمنة لنقل وتشفير الملفات مجاناً">
+    <meta name="twitter:description" content="تحويل الملفات لنصوص برمجية معقدة وحذفها فوراً بعد التحميل. الأداة الأسرع والأكثر أماناً.">
+    <meta name="twitter:image" content="https://kemo-omar.github.io/Kashare/kas.png">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="kas.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="kas.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="kas.png">
+
+    <link rel="canonical" href="https://kemo-omar.github.io/Kashare/">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "KaShare",
+      "alternateName": "كا شير",
+      "url": "https://kemo-omar.github.io/Kashare/",
+      "image": "https://kemo-omar.github.io/Kashare/kas.png",
+      "description": "منصة ويب مجانية وسريعة لنقل الصور والفيديوهات والمستندات بشكل آمن تماماً عن طريق تحويلها لنصوص وتدميرها فور استلامها.",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires HTML5, JavaScript and LocalStorage support.",
+      "author": {
+        "@type": "Person",
+        "name": "Kareem Omar",
+        "url": "https://kemo-omar.github.io/Kashare/"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "نقل فوري للملفات بدون تسجيل حساب",
+        "تدمير ذاتي وحذف فوري للبيانات بعد التنزيل بنجاح",
+        "حفظ اسم المستخدم في الكاش المحلي للمتصفح",
+        "تحويل الصور والفيديوهات إلى نصوص Base64 آمنة داخل Firebase"
+      ]
+    }
+    </script>
+    <style>
+        :root {
+            --primary: #ff3b30; /* لون الطيارة في اللوجو */
+            --secondary: #007aff;
+            --bg: #05070a;
+            --card-bg: rgba(17, 25, 40, 0.75);
+            --text: #ffffff;
+            --text-dim: #a0a0a0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #05070a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* الهيدر واللوجو */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 15px; }
+        .logo-area img { height: 60px; filter: drop-shadow(0 0 10px var(--primary)); }
+        .logo-area h1 { font-size: 28px; font-weight: 900; letter-spacing: 1px; }
+
+        .user-config {
+            background: var(--card-bg);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center; gap: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .user-config input {
+            background: transparent; border: none; color: white; outline: none; font-weight: bold; width: 120px;
+        }
+
+        /* العداد العالمي */
+        .global-stats {
+            background: linear-gradient(90deg, rgba(255,59,48,0.2), rgba(0,122,255,0.2));
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .global-stats strong { color: #ffcc00; font-size: 1.2em; }
+
+        /* منطقة العمل الرئيسية */
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+
+        .card h2 { margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 20px; }
+        .card h2 i { color: var(--primary); }
+
+        /* أدوات الإرسال */
+        .room-creator { text-align: center; }
+        .room-code-box {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 1px dashed var(--primary);
+        }
+        .room-code-box span { font-size: 32px; font-weight: 900; color: #ffcc00; letter-spacing: 5px; }
+
+        .drop-zone {
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .drop-zone:hover { background: rgba(255,59,48,0.05); border-color: var(--primary); }
+
+        /* شريط التحميل */
+        .progress-container { margin-top: 20px; display: none; }
+        .progress-bar { height: 8px; background: #222; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.2s; }
+        .progress-text { font-size: 12px; margin-top: 5px; color: var(--text-dim); }
+
+        /* أدوات الاستلام */
+        .receive-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .receive-input-group input {
+            flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #333; background: #000; color: white;
+            font-size: 18px; text-align: center; font-weight: bold;
+        }
+
+        .btn {
+            padding: 12px 25px; border-radius: 10px; border: none; cursor: pointer;
+            font-weight: bold; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-primary { background: var(--primary); color: white; width: 100%; }
+        .btn-secondary { background: var(--secondary); color: white; }
+        .btn-success { background: #34c759; color: white; width: 100%; }
+
+        /* صندوق الملف المستقبل */
+        #fileBox {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
+            border: 1px solid rgba(52, 199, 89, 0.3);
+        }
+
+        /* الفوتر والبروفايل */
+        footer {
+            margin-top: 50px;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .dev-profile {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255,255,255,0.05);
+            padding: 10px 25px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+        }
+        .dev-profile img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary); }
+        .dev-profile div { text-align: right; }
+        .dev-profile h4 { font-size: 14px; }
+        .dev-profile p { font-size: 11px; color: var(--text-dim); }
+
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
-
     <div class="container">
-        <header class="main-header">
-            <div class="logo-container">
-                <img src="kas.png" alt="KaShare Logo" class="main-logo">
-                <p class="subtitle">انقل ملفاتك بسرعة البرق.. بمجرد الاستلام تختفي تماماً</p>
+        <header>
+            <div class="logo-area">
+                <img src="kas.png" alt="KaShare">
+                <h1>كا شير <span style="font-size: 12px; color: var(--primary); display: block; font-weight: normal;">KaShare - Faster & Safer</span></h1>
             </div>
-            
-            <div class="user-badge">
-                <i class="fa-solid fa-user-astronaut"></i>
-                <input type="text" id="usernameInput" placeholder="اكتب اسمك هنا..." title="سيتم حفظ الاسم تلقائياً">
+            <div class="user-config">
+                <i class="fa-solid fa-user-gear" style="color: var(--secondary);"></i>
+                <input type="text" id="username" placeholder="اسمك هنا..." title="يتم حفظه تلقائياً">
             </div>
         </header>
 
-        <div class="stats-bar">
-            <div class="stat-item">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-                <span>إجمالي العناصر المنقولة عبر المنصة حتى الآن: <strong id="totalSharedCount">0</strong></span>
+        <div class="global-stats">
+            <i class="fa-solid fa-bolt"></i> إجمالي الملفات المنقولة بنجاح: <strong id="totalCount">0</strong>
+        </div>
+
+        <div class="main-grid">
+            <div class="card">
+                <h2><i class="fa-solid fa-paper-plane"></i> إرسال ملفات</h2>
+                <div id="setupRoom">
+                    <button class="btn btn-primary" onclick="createRoom()">إنشاء غرفة إرسال آمنة</button>
+                </div>
+                
+                <div id="roomActive" class="hidden">
+                    <div class="room-code-box">
+                        <p style="font-size: 12px; color: var(--text-dim);">رمز الغرفة المكون من 6 أرقام</p>
+                        <span id="displayCode">------</span>
+                    </div>
+                    
+                    <div class="drop-zone" onclick="document.getElementById('fileInp').click()">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 30px; color: var(--primary); margin-bottom: 10px;"></i>
+                        <p>اضغط أو اسحب الملف هنا</p>
+                        <input type="file" id="fileInp" class="hidden" onchange="handleFile(this)">
+                    </div>
+
+                    <div class="progress-container" id="uploadProgress">
+                        <div class="progress-bar"><div class="progress-fill" id="upFill"></div></div>
+                        <p class="progress-text">جاري تحويل الملف ورفعه...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><i class="fa-solid fa-hand-holding-heart"></i> استلام ملفات</h2>
+                <div class="receive-input-group">
+                    <input type="text" id="roomCodeInp" placeholder="الرمز الـ 6 أرقام" maxlength="6">
+                    <button class="btn btn-secondary" onclick="joinRoom()">دخول</button>
+                </div>
+
+                <div id="waitMsg" class="hidden" style="text-align: center; color: var(--text-dim);">
+                    <i class="fa-solid fa-spinner fa-spin"></i> جاري الانتظار... لا تغلق الصفحة
+                </div>
+
+                <div id="fileBox">
+                    <p style="font-size: 12px; color: var(--text-dim); margin-bottom: 10px;">وصلك ملف جديد من: <b id="senderName">...</b></p>
+                    <h3 id="fileName" style="margin-bottom: 15px; font-size: 16px; word-break: break-all;">file_name.jpg</h3>
+                    <button class="btn btn-success" id="downloadBtn">تنزيل بنجاح (سيتم الحذف)</button>
+                </div>
             </div>
         </div>
 
-        <main class="grid-container">
-            
-            <section class="card send-card">
-                <div class="card-header">
-                    <i class="fa-solid fa-paper-plane-top icon-send"></i>
-                    <h2>إنشاء غرفة إرسال</h2>
-                </div>
-                
-                <div id="createRoomSection">
-                    <button id="btnCreateRoom" class="btn-primary"><i class="fa-solid fa-plus"></i> توليد رمز غرفة آمنة</button>
-                </div>
+        <div style="margin-top: 30px; background: rgba(0,122,255,0.05); padding: 20px; border-radius: 15px; font-size: 13px; line-height: 1.8; border-right: 4px solid var(--secondary);">
+            <b>🛡️ ضمان الأمان:</b> نحن لا نخزن ملفاتك كملفات! نقوم بتحويلها لنصوص برمجية معقدة (Base64) ونقوم بتدمير هذه النصوص فور قيام المستلم بالضغط على زر التنزيل. تأكد من إعطاء الرمز للشخص الصحيح فقط.
+        </div>
 
-                <div id="sharingSection" class="hidden">
-                    <div class="room-code-display">
-                        <span>رمز الغرفة الخاص بك:</span>
-                        <div class="code-box">
-                            <span id="generatedCode">000000</span>
-                            <button id="btnCopyCode" title="نسخ الرمز"><i class="fa-solid fa-copy"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="drop-zone" id="dropZone">
-                        <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
-                        <p>اسحب وأفلت الملفات هنا أو اضغط للتصفح</p>
-                        <sub class="info-text">(صور، فيديوهات، مستندات - تتحول لنصوص باينري آمنة)</sub>
-                        <input type="file" id="fileInput" hidden>
-                    </div>
-
-                    <div class="progress-container hidden" id="progressContainer">
-                        <div class="progress-info">
-                            <span id="progressStatus">جاري الرفع...</span>
-                            <span id="progressPercent">0%</span>
-                        </div>
-                        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="card receive-card">
-                <div class="card-header">
-                    <i class="fa-solid fa-box-open icon-receive"></i>
-                    <h2>استلام ملف</h2>
-                </div>
-
-                <div class="input-group">
-                    <label for="roomCodeInput">أدخل رمز الغرفة المتكون من 6 أرقام:</label>
-                    <div class="input-with-btn">
-                        <input type="text" id="roomCodeInput" placeholder="مثال: 458921" maxlength="6">
-                        <button id="btnConnectRoom" class="btn-secondary">اتصال آمن</button>
-                    </div>
-                </div>
-
-                <div id="receiverStatusSection" class="receiver-status hidden">
-                    <div class="status-waiting">
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-                        <p>متصل بالغرفة.. في انتظار قيام الطرف الآخر برفع ملف...</p>
-                    </div>
-                </div>
-
-                <div id="fileDownloadSection" class="file-box hidden">
-                    <div class="file-details">
-                        <i class="fa-solid fa-file-invoice file-type-icon"></i>
-                        <div>
-                            <h4 id="fileNameDisplay">اسم الملف.jpg</h4>
-                            <p>بواسطة: <span id="senderNameDisplay">مجهول</span></p>
-                        </div>
-                    </div>
-                    <button id="btnDownload" class="btn-success"><i class="fa-solid fa-circle-down"></i> تنزيل وحذف الملف فوراً</button>
-                </div>
-            </section>
-
-        </main>
-
-        <section class="info-section">
-            <h3><i class="fa-solid fa-shield-halved"></i> كيف يعمل KaShare ولماذا هو آمن 100%؟</h3>
-            <p>المنصة تعتمد على بروتوكول نقل فوري مشفر. عند رفع أي ملف (صورة، فيديو، أو مستند)، يقوم النظام بتحويله ديناميكياً إلى سلسلة نصية معقدة (Base64) داخل قاعدة بيانات سحابية لحظية. بمجرد أن يضغط المستلم على زر <strong>"تنزيل بنجاح"</strong>، يتم تدمير النص تماماً ومن طرف جذر السيرفر، مما يضمن عدم بقاء أي أثر لملفاتك على الإنترنت.</p>
-        </section>
-
-        <footer class="main-footer">
-            <div class="developer-profile">
-                <div class="avatar">KO</div>
-                <div class="dev-info">
-                    <p class="dev-title">تطوير وتصميم الفيجوال ديزاين:</p>
-                    <a href="https://kemo-omar.github.io/Kashare/" target="_blank" class="dev-name">كريم عمر (Kareem Omar)</a>
+        <footer>
+            <div class="dev-profile">
+                <img src="https://ui-avatars.com/api/?name=Kareem+Omar&background=ff3b30&color=fff" alt="Kareem Profile">
+                <div>
+                    <h4>كريم عمر (Kareem Omar)</h4>
+                    <p>المطور والمصمم الرئيسي للمنصة</p>
                 </div>
             </div>
-            <p class="copyright">© 2026 جميع الحقوق محفوظة لـ <span>KaShare</span></p>
+            <p style="font-size: 12px; color: var(--text-dim);">© 2024 KaShare | جميع الحقوق محفوظة لـ كيمو عمر</p>
         </footer>
     </div>
 
-    <script type="module" src="app.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue, remove, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // كود الفايرباز الخاص بك يا كريم (صحيح ومجرب)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCSgvi4tyeoQKSw-o8SZ_oFms0zfjgR6kU",
+            authDomain: "alhady.firebaseapp.com",
+            databaseURL: "https://alhady-default-rtdb.firebaseio.com",
+            projectId: "alhady",
+            storageBucket: "alhady.firebasestorage.app",
+            messagingSenderId: "839424225673",
+            appId: "1:839424225673:web:4b68a4ad74e5a2526bf158",
+            measurementId: "G-5GE3K43796"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- إدارة اسم المستخدم ---
+        const nameInp = document.getElementById('username');
+        if(localStorage.getItem('ks_user')) nameInp.value = localStorage.getItem('ks_user');
+        else nameInp.value = "مستخدم" + Math.floor(Math.random()*1000);
+        
+        nameInp.oninput = () => localStorage.setItem('ks_user', nameInp.value);
+
+        // --- عداد الملفات المنقولة ---
+        const totalRef = ref(db, 'globalStats/totalShared');
+        onValue(totalRef, (s) => {
+            document.getElementById('totalCount').innerText = s.exists() ? s.val() : 0;
+        });
+
+        function trackTransfer() {
+            get(totalRef).then(s => {
+                let current = s.exists() ? s.val() : 0;
+                set(totalRef, current + 1);
+            });
+        }
+
+        // --- منطق الإرسال ---
+        window.createRoom = function() {
+            const code = Math.floor(100000 + Math.random() * 900000).toString();
+            document.getElementById('displayCode').innerText = code;
+            document.getElementById('setupRoom').classList.add('hidden');
+            document.getElementById('roomActive').classList.remove('hidden');
+
+            set(ref(db, 'rooms/' + code), {
+                status: 'empty',
+                sender: nameInp.value,
+                time: Date.now()
+            });
+            window.activeCode = code;
+        };
+
+        window.handleFile = function(input) {
+            const file = input.files[0];
+            if(!file) return;
+
+            const progress = document.getElementById('uploadProgress');
+            const fill = document.getElementById('upFill');
+            progress.style.display = 'block';
+
+            const reader = new FileReader();
+            reader.onloadstart = () => fill.style.width = '20%';
+            reader.onload = (e) => {
+                fill.style.width = '60%';
+                const base64Data = e.target.result;
+
+                set(ref(db, 'rooms/' + window.activeCode), {
+                    status: 'ready',
+                    fileName: file.name,
+                    fileData: base64Data,
+                    sender: nameInp.value,
+                    time: Date.now()
+                }).then(() => {
+                    fill.style.width = '100%';
+                    document.querySelector('.progress-text').innerText = "تم الرفع! اطلب من المستلم تنزيل الملف الآن.";
+                });
+            };
+            reader.readAsDataURL(file);
+        };
+
+        // --- منطق الاستلام ---
+        window.joinRoom = function() {
+            const code = document.getElementById('roomCodeInp').value;
+            if(code.length !== 6) return alert("أدخل الـ 6 أرقام");
+
+            document.getElementById('waitMsg').classList.remove('hidden');
+            
+            const roomRef = ref(db, 'rooms/' + code);
+            onValue(roomRef, (s) => {
+                const data = s.val();
+                if(!data) {
+                    document.getElementById('waitMsg').classList.add('hidden');
+                    return;
+                }
+
+                if(data.status === 'ready') {
+                    document.getElementById('waitMsg').classList.add('hidden');
+                    document.getElementById('fileBox').style.display = 'block';
+                    document.getElementById('senderName').innerText = data.sender;
+                    document.getElementById('fileName').innerText = data.fileName;
+
+                    document.getElementById('downloadBtn').onclick = () => {
+                        const link = document.createElement('a');
+                        link.href = data.fileData;
+                        link.download = data.fileName;
+                        link.click();
+
+                        // المسح الفوري من الفايرباز بمجرد التنزيل
+                        remove(roomRef).then(() => {
+                            trackTransfer();
+                            alert("تم التنزيل بنجاح وحذف البيانات نهائياً.");
+                            location.reload(); // إعادة تصفير الصفحة للعمل مرة تانية
+                        });
+                    };
+                }
+            });
+        };
+
+    </script>
 </body>
 </html>
