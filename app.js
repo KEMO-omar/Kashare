@@ -1,7 +1,8 @@
+// الكود اللي أنت بعتهولي بالظبط لتهيئة الفايرباز
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, onValue, update, remove, get } from "firebase/database";
+import { getAnalytics } from "firebase/analytics";
+import { getDatabase, ref, set, onValue, remove, get } from "firebase/database";
 
-// إعدادات الفايرباز الخاصة بك يا كريم
 const firebaseConfig = {
   apiKey: "AIzaSyCSgvi4tyeoQKSw-o8SZ_oFms0zfjgR6kU",
   authDomain: "alhady.firebaseapp.com",
@@ -13,15 +14,17 @@ const firebaseConfig = {
   measurementId: "G-5GE3K43796"
 };
 
-// تهيئة الفايرباز وقاعدة البيانات اللحظية
+// تهيئة التطبيق والتحليلات بناءً على كودك
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+// ربط قاعدة البيانات اللحظية بمشروع alhady
 const db = getDatabase(app);
 
-// عناصر واجهة المستخدم - الجانب العام
+// --- باقي عناصر الواجهة والتحكم لـ KaShare ---
 const usernameInput = document.getElementById('usernameInput');
 const totalSharedCountText = document.getElementById('totalSharedCount');
 
-// عناصر واجهة المرسل
 const btnCreateRoom = document.getElementById('btnCreateRoom');
 const createRoomSection = document.getElementById('createRoomSection');
 const sharingSection = document.getElementById('sharingSection');
@@ -34,7 +37,6 @@ const progressFill = document.getElementById('progressFill');
 const progressPercent = document.getElementById('progressPercent');
 const progressStatus = document.getElementById('progressStatus');
 
-// عناصر واجهة المستلم
 const roomCodeInput = document.getElementById('roomCodeInput');
 const btnConnectRoom = document.getElementById('btnConnectRoom');
 const receiverStatusSection = document.getElementById('receiverStatusSection');
@@ -43,11 +45,10 @@ const fileNameDisplay = document.getElementById('fileNameDisplay');
 const senderNameDisplay = document.getElementById('senderNameDisplay');
 const btnDownload = document.getElementById('btnDownload');
 
-// متغيرات الغرفة الحالية
 let currentRoomCode = null;
 let currentFilePayload = null; 
 
-// --- 1. إدارة اسم المستخدم بالكاش LocalStorage ---
+// 1. كاش اسم المستخدم
 if (localStorage.getItem('kashare_username')) {
     usernameInput.value = localStorage.getItem('kashare_username');
 } else {
@@ -57,7 +58,7 @@ usernameInput.addEventListener('input', () => {
     localStorage.setItem('kashare_username', usernameInput.value);
 });
 
-// --- 2. جلب وتحديث العداد الإجمالي للعناصر المنقولة لجميع المستخدمين ---
+// 2. عداد العناصر المنقولة من الفايرباز
 const globalCounterRef = ref(db, 'globalStats/totalShared');
 onValue(globalCounterRef, (snapshot) => {
     if (snapshot.exists()) {
@@ -68,7 +69,6 @@ onValue(globalCounterRef, (snapshot) => {
     }
 });
 
-// وظيفة زيادة العداد العام عند اكتمال النقل بنجاح
 function incrementGlobalCounter() {
     get(globalCounterRef).then((snapshot) => {
         let currentCount = snapshot.exists() ? snapshot.val() : 0;
@@ -76,30 +76,34 @@ function incrementGlobalCounter() {
     });
 }
 
-// --- 3. منطق الإرسال وإنشاء الغرف الآمنة ---
+// 3. إنشاء الغرفة وتوليد الرمز
 btnCreateRoom.addEventListener('click', () => {
-    // توليد كود عشوائي فريد من 6 أرقام
     currentRoomCode = Math.floor(100000 + Math.random() * 900000).toString();
     generatedCodeText.innerText = currentRoomCode;
     
-    // إنشاء العقدة في فايرباز وجعلها فارغة وجاهزة
-    set(ref(db, 'rooms/' + currentRoomCode), {
+    createRoomSection.classList.add('hidden');
+    sharingSection.classList.remove('hidden');
+
+    const roomRef = ref(db, 'rooms/' + currentRoomCode);
+    set(roomRef, {
         status: 'waiting',
         senderName: usernameInput.value,
-        timestamp: Date.now()
-    }).then(() => {
-        createRoomSection.classList.add('hidden');
-        sharingSection.classList.remove('hidden');
+        timestamp: Date.now(),
+        fileName: "",
+        fileData: "",
+        fileType: ""
+    }).catch((err) => {
+        console.error("Firebase Error: ", err);
+        alert("تأكد من إعدادات الـ Rules في سرفر alhady");
     });
 });
 
-// نسخ كود الغرفة
 btnCopyCode.addEventListener('click', () => {
     navigator.clipboard.writeText(currentRoomCode);
     alert('تم نسخ رمز الغرفة: ' + currentRoomCode);
 });
 
-// تفعيل الضغط والسحب على منطقة الرفع
+// 4. معالجة السحب والرفع وتحويل الملف لنص
 dropZone.addEventListener('click', () => fileInput.click());
 dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
@@ -116,41 +120,37 @@ fileInput.addEventListener('change', (e) => {
     }
 });
 
-// تحويل الملف لنص آمن (Base64 String) ورفعه بدقة مع تتبع النسبة
 function handleFileSelect(file) {
     progressContainer.classList.remove('hidden');
-    progressStatus.innerText = "جاري تحضير الملف وتحويله...";
+    updateProgressBar(10, "جاري تحضير الملف...");
     
     const reader = new FileReader();
-    
-    // تتبع البروجريس بار أثناء التحويل والرفع المحلي المبدئي
     reader.onprogress = (event) => {
         if (event.lengthComputable) {
-            const percent = Math.round((event.loaded / event.total) * 50); // أول 50% للتحويل والقرائة لضمان السرعة
+            const percent = Math.round((event.loaded / event.total) * 40) + 10;
             updateProgressBar(percent, "جاري معالجة البيانات...");
         }
     };
 
     reader.onload = function(e) {
-        updateProgressBar(60, "جاري التشفير والرفع الفوري...");
+        updateProgressBar(60, "جاري التشفير والرفع...");
         const base64Data = e.target.result;
         
-        // رفع البيانات للـ Database داخل الغرفة المخصصة بالرمز السري
         const roomRef = ref(db, 'rooms/' + currentRoomCode);
-        update(roomRef, {
+        set(roomRef, {
             fileName: file.name,
             fileType: file.type,
             fileData: base64Data,
             status: 'ready',
-            senderName: usernameInput.value
+            senderName: usernameInput.value,
+            timestamp: Date.now()
         }).then(() => {
-            updateProgressBar(100, "تم الرفع بنجاح! في انتظار سحب المستلم للملف...");
+            updateProgressBar(100, "تم الرفع! في انتظار الطرف الآخر...");
         }).catch((err) => {
-            alert("فشل الرفع، يرجى التحقق من حجم الملف");
+            alert("فشل الرفع، تأكد من حجم الملف");
             progressContainer.classList.add('hidden');
         });
     };
-    
     reader.readAsDataURL(file);
 }
 
@@ -160,23 +160,22 @@ function updateProgressBar(percent, statusText) {
     progressStatus.innerText = statusText;
 }
 
-// --- 4. منطق الاستلام والاتصال الآمن بنسبة 100% ---
+// 5. الاستلام الآمن والتحميل الفوري ثم الحذف
 btnConnectRoom.addEventListener('click', () => {
     const code = roomCodeInput.value.trim();
     if (code.length !== 6 || isNaN(code)) {
-        alert("من فضلك أدخل رمزاً صالحاً مكوناً من 6 أرقام لتفادي الأخطاء");
+        alert("أدخل رمزاً صالحاً مكوناً من 6 أرقام");
         return;
     }
 
     receiverStatusSection.classList.remove('hidden');
     btnConnectRoom.disabled = true;
 
-    // الاتصال الفوري والإنصات المباشر لغرفة الـ Firebase المحددة
     const targetRoomRef = ref(db, 'rooms/' + code);
     onValue(targetRoomRef, (snapshot) => {
         const data = snapshot.val();
         if (!data) {
-            alert("عذراً، الرمز غير صحيح أو أن الغرفة تم تدميرها بالفعل.");
+            alert("الرمز غير صحيح أو تم تدمير الغرفة مسبقاً.");
             resetReceiverUI();
             return;
         }
@@ -185,19 +184,17 @@ btnConnectRoom.addEventListener('click', () => {
             receiverStatusSection.innerHTML = `
                 <div class="status-waiting">
                     <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--accent-blue)"></i>
-                    <p>تم الاتصال بالغرفة الآمنة بنجاح. ننتظر الآن قيام <strong>${data.senderName}</strong> بإرسال الملف...</p>
+                    <p>متصل.. ننتظر قيام <strong>${data.senderName}</strong> برفع الملف...</p>
                 </div>`;
             fileDownloadSection.classList.add('hidden');
         } 
         else if (data.status === 'ready') {
-            // الملف وصل وجاهز للتحميل فوراً
             receiverStatusSection.classList.add('hidden');
             fileDownloadSection.classList.remove('hidden');
             
             fileNameDisplay.innerText = data.fileName;
             senderNameDisplay.innerText = data.senderName;
             
-            // تخزين البيانات مؤقتاً في الرام لغرض التحميل والتدمير الفوري
             currentFilePayload = {
                 code: code,
                 name: data.fileName,
@@ -207,11 +204,9 @@ btnConnectRoom.addEventListener('click', () => {
     });
 });
 
-// تحميل الملف وتدميره من الفايرباز فوراً وحالاً
 btnDownload.addEventListener('click', () => {
     if (!currentFilePayload) return;
 
-    // 1. معالجة النص وتحويله لملف حقيقي جاهز للتحميل في جهاز المستلم
     const link = document.createElement('a');
     link.href = currentFilePayload.data;
     link.download = currentFilePayload.name;
@@ -219,17 +214,12 @@ btnDownload.addEventListener('click', () => {
     link.click();
     document.body.removeChild(link);
 
-    // 2. تدمير ومسح الغرفة والملف النصي من السيرفر تماماً (أمان 100%)
+    // تدمير البيانات تماماً فور التنزيل
     const roomRef = ref(db, 'rooms/' + currentFilePayload.code);
     remove(roomRef).then(() => {
-        // 3. زيادة العداد العام للمنصة بنجاح
         incrementGlobalCounter();
-        
-        alert("تم تحميل الملف بنجاح وتدمير البيانات والرمز تماماً من السيرفر لأمانك!");
-        
-        // إعادة تهيئة الواجهة لعمليات تانية سريعة من غير ريفريش
+        alert("تم التحميل بنجاح وتم حذف الملف نهائياً من السيرفر!");
         resetReceiverUI();
-        location.reload(); // ريفريش اختياري لضمان تنظيف الميموري بالكامل
     });
 });
 
